@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Components/ChildActorComponent.h"
 
 // Sets default values
 AAR_PlayerCharacter::AAR_PlayerCharacter()
@@ -18,6 +19,9 @@ AAR_PlayerCharacter::AAR_PlayerCharacter()
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+	WeaponActor = CreateDefaultSubobject<UChildActorComponent>("WeaponActor");
+	WeaponActor->SetupAttachment(FirstPersonCameraComponent);
 }
 
 // Called when the game starts or when spawned

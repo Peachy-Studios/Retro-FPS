@@ -19,6 +19,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UChildActorComponent* WeaponActor;
+
 	/** Mapping Context */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowedPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
