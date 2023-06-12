@@ -7,6 +7,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Components/ChildActorComponent.h"
+#include "Weapon/AR_WeaponBase.h"
+#include "Weapon/PlayerWeapon.h"
 
 // Sets default values
 AAR_PlayerCharacter::AAR_PlayerCharacter()
@@ -37,6 +39,8 @@ void AAR_PlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	
+	EquipWeapon(AAR_WeaponBase::StaticClass());
 }
 
 
@@ -73,5 +77,19 @@ void AAR_PlayerCharacter::Look(const FInputActionValue& Value)
 	{
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AAR_PlayerCharacter::EquipWeapon(const TSubclassOf<AAR_WeaponBase> Weapon)
+{
+	if (!ensure(IsValid(WeaponActor)) || !ensure(IsValid(Weapon))) return;
+
+	WeaponActor->SetChildActorClass(Weapon);
+
+	if (!ensure(IsValid(WeaponActor->GetChildActor()))) return;
+
+	if (WeaponActor->GetChildActor()->GetClass()->ImplementsInterface(UPlayerWeapon::StaticClass()))
+	{
+		Cast<IPlayerWeapon>(WeaponActor->GetChildActor())->Initialize();
 	}
 }
