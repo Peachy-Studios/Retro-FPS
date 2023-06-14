@@ -29,14 +29,24 @@ public:
 	/* IPlayerWeapon Interface */
 	virtual void Initialize() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void WeaponBobbing(bool IsMoving, float DeltaTime);
+
 protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AR/Weapon", meta = (AllowPrivateAccess = "true"))
 	class UPaperFlipbook* IdleFlipbook;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AR/Weapon", meta = (AllowPrivateAccess = "true"))
 	class UPaperFlipbook* ShootFlipbook;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AR/Weapon", meta = (AllowPrivateAccess = "true"))
+	class UTextureRenderTarget2D* RenderTexure;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AR/Weapon", meta = (AllowPrivateAccess = "true"))
+	FVector WeaponInitialLocation;
+
 };

@@ -13,6 +13,8 @@
 // Sets default values
 AAR_PlayerCharacter::AAR_PlayerCharacter()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 
@@ -54,6 +56,19 @@ void AAR_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAR_PlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAR_PlayerCharacter::Look);
 	}
+}
+
+void AAR_PlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (!WeaponActor || !WeaponActor->GetChildActor()) return;
+
+	AAR_WeaponBase* Weapon = Cast<AAR_WeaponBase>(WeaponActor->GetChildActor());
+
+	if (!Weapon) return;
+
+	Weapon->WeaponBobbing(GetVelocity().SizeSquared() > 0, DeltaSeconds);
 }
 
 void AAR_PlayerCharacter::Move(const FInputActionValue& Value)

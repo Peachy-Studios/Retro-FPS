@@ -58,6 +58,8 @@ void AAR_WeaponPickup::PickupWeapon(UPrimitiveComponent* OverlappedComponent, AA
 		if (!PlayerCharacter || !WeaponType) return;
 
 		PlayerCharacter->EquipWeapon(WeaponType);
+
+		Destroy();
 	}
 }
 

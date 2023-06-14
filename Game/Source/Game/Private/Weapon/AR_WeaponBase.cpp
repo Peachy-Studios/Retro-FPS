@@ -5,6 +5,8 @@
 #include "Components/SceneCaptureComponent2D.h"
 #include "PaperFlipbookComponent.h"
 #include "Components/PointLightComponent.h"
+#include "Engine/TextureRenderTarget2D.h"
+#include "Kismet/KismetRenderingLibrary.h"
 
 // Sets default values
 AAR_WeaponBase::AAR_WeaponBase(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
@@ -13,14 +15,21 @@ AAR_WeaponBase::AAR_WeaponBase(const FObjectInitializer& ObjectInitializer): Sup
 	CaptureComponent->SetupAttachment(RootComponent);
 	CaptureComponent->ProjectionType = ECameraProjectionMode::Orthographic;
 	CaptureComponent->OrthoWidth = 426;
+	
+	if (RenderTexure) CaptureComponent->TextureTarget = RenderTexure;
 
 	FlipbookComp = ObjectInitializer.GetObj()->CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("WeaponSprite"));
 	FlipbookComp->SetupAttachment(CaptureComponent);
-	CaptureComponent->ShowOnlyComponent(FlipbookComp);
 	AddInstanceComponent(FlipbookComp);
+
+	FlipbookComp->SetRelativeLocation(FVector(0.f, 100.f, -50.f));
+	FlipbookComp->SetRelativeRotation(FRotator(0.f, 90.f, 0.f));
+
+	FlipbookComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	PointLight = ObjectInitializer.GetObj()->CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
 	PointLight->SetupAttachment(CaptureComponent);
+
 }
 
 void AAR_WeaponBase::Initialize()
@@ -33,6 +42,10 @@ void AAR_WeaponBase::Initialize()
 
 	if(!ensure(IsValid(FlipbookComp))) return;
 
+	UKismetRenderingLibrary::ClearRenderTarget2D(GetWorld(), CaptureComponent->TextureTarget, FLinearColor::Black);
+
+	CaptureComponent->ShowOnlyComponent(FlipbookComp);
+
 	FlipbookComp->SetFlipbook(IdleFlipbook);
 }
 
@@ -40,6 +53,11 @@ void AAR_WeaponBase::Initialize()
 void AAR_WeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (FlipbookComp)
+	{
+		WeaponInitialLocation = FlipbookComp->GetRelativeLocation();
+	}
 }
 
 

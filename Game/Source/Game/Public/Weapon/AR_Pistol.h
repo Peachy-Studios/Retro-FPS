@@ -16,4 +16,6 @@ class GAME_API AAR_Pistol : public AAR_WeaponBase
 
 public:
 	AAR_Pistol(const FObjectInitializer& ObjectInitializer);
+
+	virtual void Initialize() override;
 };
