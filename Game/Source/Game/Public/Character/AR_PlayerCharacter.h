@@ -5,12 +5,17 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "GameplayTagContainer.h"
+#include <GameplayEffectTypes.h>
+#include "AbilitySystemInterface.h"
 #include "AR_PlayerCharacter.generated.h"
 
 class UCameraComponent;
+class UAR_AbilitySystemComponent;
+class UAR_AttributeSet;
 
 UCLASS()
-class GAME_API AAR_PlayerCharacter : public ACharacter
+class GAME_API AAR_PlayerCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +26,12 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UChildActorComponent* WeaponActor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AR/AbilitySystem", meta = (AllowPrivateAccess = "true"))
+	UAR_AbilitySystemComponent* ASC;
+
+	UPROPERTY()
+	UAR_AttributeSet* Attributes;
 
 	/** Mapping Context */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowedPrivateAccess = "true"))
@@ -49,9 +60,24 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 public:	
+	// Effect to initialize the attribute sets
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="AR/Ability")
+	TSubclassOf<class UGameplayEffect> DefaultAttributeEffects;
+
+	// Array of default abilities
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AR/Ability")
+	TArray<TSubclassOf<class UGameplayAbility>> DefaultAbilities;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaSeconds) override;
 
 	void EquipWeapon(const TSubclassOf<class AAR_WeaponBase> Weapon);
+
+	UFUNCTION()
+	FORCEINLINE class UChildActorComponent* GetWeaponActor() { return WeaponActor; }
+
+	// Inherited via IAbilitySystemInterface
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAR_AbilitySystemComponent* GetAR_AbilitySystemComponent() const;
 };

@@ -32,8 +32,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void WeaponBobbing(bool IsMoving, float DeltaTime);
 
-protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void WeaponPickup();
 
+protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -45,8 +47,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AR/Weapon", meta = (AllowPrivateAccess = "true"))
 	class UTextureRenderTarget2D* RenderTexure;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AR/Weapon", meta = (AllowPrivateAccess = "true"))
 	FVector WeaponInitialLocation;
-
 };

@@ -9,6 +9,8 @@
 #include "Components/ChildActorComponent.h"
 #include "Weapon/AR_WeaponBase.h"
 #include "Weapon/PlayerWeapon.h"
+#include "AbilitySystem/AR_AbilitySystemComponent.h"
+#include "AbilitySystem/AR_AttributeSet.h"
 
 // Sets default values
 AAR_PlayerCharacter::AAR_PlayerCharacter()
@@ -26,6 +28,9 @@ AAR_PlayerCharacter::AAR_PlayerCharacter()
 
 	WeaponActor = CreateDefaultSubobject<UChildActorComponent>("WeaponActor");
 	WeaponActor->SetupAttachment(FirstPersonCameraComponent);
+
+	ASC = CreateDefaultSubobject<UAR_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	Attributes = CreateDefaultSubobject<UAR_AttributeSet>(TEXT("Attributes"));
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +48,33 @@ void AAR_PlayerCharacter::BeginPlay()
 	}
 	
 	EquipWeapon(AAR_WeaponBase::StaticClass());
+
+	// Setup AbilitySystemComponent
+	if (ASC)
+	{
+		ASC->InitAbilityActorInfo(this, this);
+
+		if (DefaultAttributeEffects)
+		{
+			FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
+			EffectContext.AddSourceObject(this);
+			FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(DefaultAttributeEffects, 1, EffectContext);
+
+			if (SpecHandle.IsValid())
+			{
+				FActiveGameplayEffectHandle GEHandle = ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
+
+		// Set Default attributes
+		if (HasAuthority())
+		{
+			for (TSubclassOf<UGameplayAbility>& StartupAbility : DefaultAbilities)
+			{
+				ASC->GiveAbility(FGameplayAbilitySpec(StartupAbility.GetDefaultObject(), 1, 0));
+			}
+		}
+	}
 }
 
 
@@ -107,4 +139,14 @@ void AAR_PlayerCharacter::EquipWeapon(const TSubclassOf<AAR_WeaponBase> Weapon)
 	{
 		Cast<IPlayerWeapon>(WeaponActor->GetChildActor())->Initialize();
 	}
+}
+
+UAbilitySystemComponent* AAR_PlayerCharacter::GetAbilitySystemComponent() const
+{
+	return ASC;
+}
+
+UAR_AbilitySystemComponent* AAR_PlayerCharacter::GetAR_AbilitySystemComponent() const
+{
+	return ASC;
 }

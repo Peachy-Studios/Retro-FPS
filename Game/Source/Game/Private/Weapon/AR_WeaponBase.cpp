@@ -29,7 +29,6 @@ AAR_WeaponBase::AAR_WeaponBase(const FObjectInitializer& ObjectInitializer): Sup
 
 	PointLight = ObjectInitializer.GetObj()->CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
 	PointLight->SetupAttachment(CaptureComponent);
-
 }
 
 void AAR_WeaponBase::Initialize()
@@ -58,6 +57,8 @@ void AAR_WeaponBase::BeginPlay()
 	{
 		WeaponInitialLocation = FlipbookComp->GetRelativeLocation();
 	}
+	
+	WeaponPickup();
 }
 
 

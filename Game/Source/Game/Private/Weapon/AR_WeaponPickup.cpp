@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Camera/PlayerCameraManager.h"
+#include "Components/ChildActorComponent.h"
 
 // Sets default values
 AAR_WeaponPickup::AAR_WeaponPickup()
