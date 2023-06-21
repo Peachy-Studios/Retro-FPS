@@ -11,6 +11,7 @@
 #include "Weapon/PlayerWeapon.h"
 #include "AbilitySystem/AR_AbilitySystemComponent.h"
 #include "AbilitySystem/AR_AttributeSet.h"
+#include "AbilitySystem/AR_GameplayAbility.h"
 
 // Sets default values
 AAR_PlayerCharacter::AAR_PlayerCharacter()
@@ -44,6 +45,7 @@ void AAR_PlayerCharacter::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+			Subsystem->AddMappingContext(WeaponMappingContext, 0);
 		}
 	}
 	
@@ -69,9 +71,9 @@ void AAR_PlayerCharacter::BeginPlay()
 		// Set Default attributes
 		if (HasAuthority())
 		{
-			for (TSubclassOf<UGameplayAbility>& StartupAbility : DefaultAbilities)
+			for (TSubclassOf<UAR_GameplayAbility>& StartupAbility : DefaultAbilities)
 			{
-				ASC->GiveAbility(FGameplayAbilitySpec(StartupAbility.GetDefaultObject(), 1, 0));
+				ASC->GiveAbility(FGameplayAbilitySpec(StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID), this));
 			}
 		}
 	}
@@ -87,6 +89,8 @@ void AAR_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAR_PlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAR_PlayerCharacter::Look);
+
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AAR_PlayerCharacter::HandleShoot);
 	}
 }
 
@@ -127,6 +131,26 @@ void AAR_PlayerCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AAR_PlayerCharacter::SendLocalInputToASC(bool bIsPressed, EAR_AbilityInputID AbilityInputID)
+{
+	if(!IsValid(ASC)) return;
+
+	if(bIsPressed)
+	{
+		ASC->AbilityLocalInputPressed(static_cast<int32>(AbilityInputID));
+	}
+
+	else
+	{
+		ASC->AbilityLocalInputReleased(static_cast<int32>(AbilityInputID));
+	}
+}
+
+void AAR_PlayerCharacter::HandleShoot()
+{
+	SendLocalInputToASC(true, EAR_AbilityInputID::Shoot);
+}
+
 void AAR_PlayerCharacter::EquipWeapon(const TSubclassOf<AAR_WeaponBase> Weapon)
 {
 	if (!ensure(IsValid(WeaponActor)) || !ensure(IsValid(Weapon))) return;
@@ -139,6 +163,16 @@ void AAR_PlayerCharacter::EquipWeapon(const TSubclassOf<AAR_WeaponBase> Weapon)
 	{
 		Cast<IPlayerWeapon>(WeaponActor->GetChildActor())->Initialize();
 	}
+}
+
+AAR_WeaponBase* AAR_PlayerCharacter::GetCurrentWeapon() const
+{
+	if(GetWeaponActor() && GetWeaponActor()->GetChildActor())
+	{
+		return Cast<AAR_WeaponBase>(GetWeaponActor()->GetChildActor());
+	}
+	
+	return nullptr;
 }
 
 UAbilitySystemComponent* AAR_PlayerCharacter::GetAbilitySystemComponent() const

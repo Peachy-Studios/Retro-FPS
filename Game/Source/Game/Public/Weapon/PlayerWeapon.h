@@ -25,4 +25,7 @@ public:
 
 	UFUNCTION()
 	virtual void Initialize() = 0;
+
+	UFUNCTION()
+	virtual void Fire() = 0;
 };

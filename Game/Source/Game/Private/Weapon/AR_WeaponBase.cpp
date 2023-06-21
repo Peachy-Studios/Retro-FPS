@@ -29,6 +29,7 @@ AAR_WeaponBase::AAR_WeaponBase(const FObjectInitializer& ObjectInitializer): Sup
 
 	PointLight = ObjectInitializer.GetObj()->CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
 	PointLight->SetupAttachment(CaptureComponent);
+	PointLight->SetHiddenInGame(true);
 }
 
 void AAR_WeaponBase::Initialize()
@@ -46,6 +47,11 @@ void AAR_WeaponBase::Initialize()
 	CaptureComponent->ShowOnlyComponent(FlipbookComp);
 
 	FlipbookComp->SetFlipbook(IdleFlipbook);
+}
+
+void AAR_WeaponBase::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
 }
 
 // Called when the game starts or when spawned

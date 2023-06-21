@@ -18,4 +18,7 @@ public:
 	AAR_Pistol(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Initialize() override;
+	virtual void Fire() override;
+
+	void WeaponFlash() const;
 };

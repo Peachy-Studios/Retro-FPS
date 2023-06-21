@@ -8,6 +8,7 @@
 #include "GameplayTagContainer.h"
 #include <GameplayEffectTypes.h>
 #include "AbilitySystemInterface.h"
+#include "Game.h"
 #include "AR_PlayerCharacter.generated.h"
 
 class UCameraComponent;
@@ -36,14 +37,18 @@ protected:
 	/** Mapping Context */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowedPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowedPrivateAccess = "true"))
+	class UInputMappingContext* WeaponMappingContext;
+	
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
-
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
+	/** Shoot */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ShootAction;
 
 public:
 	// Sets default values for this character's properties
@@ -59,6 +64,9 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void SendLocalInputToASC(bool bIsPressed, EAR_AbilityInputID AbilityInputID);
+	void HandleShoot();
+
 public:	
 	// Effect to initialize the attribute sets
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="AR/Ability")
@@ -66,7 +74,7 @@ public:
 
 	// Array of default abilities
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AR/Ability")
-	TArray<TSubclassOf<class UGameplayAbility>> DefaultAbilities;
+	TArray<TSubclassOf<class UAR_GameplayAbility>> DefaultAbilities;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -75,7 +83,13 @@ public:
 	void EquipWeapon(const TSubclassOf<class AAR_WeaponBase> Weapon);
 
 	UFUNCTION()
-	FORCEINLINE class UChildActorComponent* GetWeaponActor() { return WeaponActor; }
+	FORCEINLINE class UChildActorComponent* GetWeaponActor() const { return WeaponActor; }
+
+	UFUNCTION()
+	FORCEINLINE class UCameraComponent* GetCamera() const { return FirstPersonCameraComponent; }
+	
+	UFUNCTION()
+	class AAR_WeaponBase* GetCurrentWeapon() const;
 
 	// Inherited via IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

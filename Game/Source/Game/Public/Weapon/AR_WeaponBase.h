@@ -28,6 +28,7 @@ public:
 	
 	/* IPlayerWeapon Interface */
 	virtual void Initialize() override;
+	virtual void Fire() override;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void WeaponBobbing(bool IsMoving, float DeltaTime);

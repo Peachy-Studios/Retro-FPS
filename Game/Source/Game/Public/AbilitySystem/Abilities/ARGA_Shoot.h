@@ -21,6 +21,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="AR/Effects", meta = (AllowPrivateAccess="true"))
 	TSubclassOf<UGameplayEffect> GameplayEffect;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="AR/Settings", meta = (AllowPrivateAccess="true"))
+	float WeaponRange;
+	
 	UPROPERTY()
 	class UAbilityTask_WaitGameplayEvent* WaitForEventTask;
 

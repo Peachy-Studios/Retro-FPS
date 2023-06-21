@@ -26,3 +26,43 @@ void AAR_Pistol::Initialize()
 	CaptureComponent->ShowOnlyComponent(FlipbookComp);
 
 }
+
+void AAR_Pistol::Fire()
+{
+	WeaponFlash();
+
+	// Animate weapon
+	if(FlipbookComp)
+	{
+		FlipbookComp->SetFlipbook(ShootFlipbook);
+		
+		FTimerDelegate WeaponShootDelegate;
+		WeaponShootDelegate.BindLambda([&]
+		{
+			FlipbookComp->SetFlipbook(IdleFlipbook);
+		});
+
+		FTimerHandle TimerHandle;
+		GetWorldTimerManager().SetTimer(TimerHandle, WeaponShootDelegate, FlipbookComp->GetFlipbookLength(), false);
+	}
+}
+
+void AAR_Pistol::WeaponFlash() const
+{
+	if(PointLight)
+	{
+		PointLight->SetHiddenInGame(true);
+	}
+
+	FTimerDelegate WeaponFlashDelegate;
+	WeaponFlashDelegate.BindLambda([&]
+	{
+		if(PointLight)
+		{
+			PointLight->SetHiddenInGame(false);
+		}
+	});
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, WeaponFlashDelegate, 0.25f, false);
+}
