@@ -49,20 +49,17 @@ void AAR_Pistol::Fire()
 
 void AAR_Pistol::WeaponFlash() const
 {
+	FTimerDelegate WeaponFlashDelegate;
+
 	if(PointLight)
 	{
-		PointLight->SetHiddenInGame(true);
-	}
-
-	FTimerDelegate WeaponFlashDelegate;
-	WeaponFlashDelegate.BindLambda([&]
-	{
-		if(PointLight)
+		PointLight->SetHiddenInGame(false);
+		WeaponFlashDelegate.BindLambda([&]
 		{
-			PointLight->SetHiddenInGame(false);
-		}
-	});
-
+			PointLight->SetHiddenInGame(true);
+		});
+	}
+	
 	FTimerHandle TimerHandle;
 	GetWorldTimerManager().SetTimer(TimerHandle, WeaponFlashDelegate, 0.25f, false);
 }

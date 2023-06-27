@@ -33,8 +33,6 @@ protected:
 	UFUNCTION()
 	void OnEventReceived(FGameplayEventData Payload);
 
-	UFUNCTION()
-	void OnEndAbility();
 	
 public:
 	UARGA_Shoot();
@@ -45,4 +43,6 @@ public:
 	virtual void Fire() {};
 	virtual void Reset() {};
 
+	UFUNCTION()
+	void OnEndAbility();
 };

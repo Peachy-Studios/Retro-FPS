@@ -12,6 +12,7 @@
 #include "AbilitySystem/AR_AbilitySystemComponent.h"
 #include "AbilitySystem/AR_AttributeSet.h"
 #include "AbilitySystem/AR_GameplayAbility.h"
+#include "Core/AR_ObjectPoolManager.h"
 
 // Sets default values
 AAR_PlayerCharacter::AAR_PlayerCharacter()
@@ -32,6 +33,8 @@ AAR_PlayerCharacter::AAR_PlayerCharacter()
 
 	ASC = CreateDefaultSubobject<UAR_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	Attributes = CreateDefaultSubobject<UAR_AttributeSet>(TEXT("Attributes"));
+
+	ObjectPoolManager = CreateDefaultSubobject<UAR_ObjectPoolManager>(TEXT("Bullet Hole Pool"));
 }
 
 // Called when the game starts or when spawned

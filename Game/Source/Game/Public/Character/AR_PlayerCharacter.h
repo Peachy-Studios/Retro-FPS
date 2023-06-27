@@ -14,6 +14,7 @@
 class UCameraComponent;
 class UAR_AbilitySystemComponent;
 class UAR_AttributeSet;
+class UAR_ObjectPoolManager;
 
 UCLASS()
 class GAME_API AAR_PlayerCharacter : public ACharacter, public IAbilitySystemInterface
@@ -30,6 +31,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AR/AbilitySystem", meta = (AllowPrivateAccess = "true"))
 	UAR_AbilitySystemComponent* ASC;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,  Category = "AR/ObjectPool", meta = (AllowPrivateAccess = "true"))
+	UAR_ObjectPoolManager* ObjectPoolManager;
 
 	UPROPERTY()
 	UAR_AttributeSet* Attributes;
@@ -89,8 +93,11 @@ public:
 	FORCEINLINE class UCameraComponent* GetCamera() const { return FirstPersonCameraComponent; }
 	
 	UFUNCTION()
-	class AAR_WeaponBase* GetCurrentWeapon() const;
+    class UAR_ObjectPoolManager* GetBulletHolePoolManager() const { return ObjectPoolManager; };
 
+	UFUNCTION()
+	class AAR_WeaponBase* GetCurrentWeapon() const;
+	
 	// Inherited via IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAR_AbilitySystemComponent* GetAR_AbilitySystemComponent() const;

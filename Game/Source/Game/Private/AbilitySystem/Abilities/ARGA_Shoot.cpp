@@ -25,14 +25,14 @@ void UARGA_Shoot::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 
 		WaitForEventTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, WeaponEventTag);
 		WaitForEventTask->EventReceived.AddDynamic(this, &UARGA_Shoot::OnEventReceived);
-
+		
 		Fire();
-
+		
 		FireRateDelayTask = UAbilityTask_WaitDelay::WaitDelay(this, GetCooldownTimeRemaining());
 		FireRateDelayTask->OnFinish.AddDynamic(this, &UARGA_Shoot::OnEndAbility);
+		FireRateDelayTask->Activate();
 	}
 
-	
 }
 
 void UARGA_Shoot::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -61,7 +61,7 @@ void UARGA_Shoot::OnEventReceived(FGameplayEventData Payload)
 void UARGA_Shoot::OnEndAbility()
 {
 	check(CurrentActorInfo);
-
+	UE_LOG(LogTemp, Warning, TEXT("Ended"));
 	constexpr bool bReplicateEndAbility = true;
 	constexpr bool bWasCancelled = false;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);

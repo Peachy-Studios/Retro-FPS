@@ -18,7 +18,11 @@ public:
 	UARGA_Pistol();
 
 	class AAR_PlayerCharacter* GetPlayer() const;
-	class AAR_WeaponBase* GetWeapon(const AAR_PlayerCharacter* PlayerCharacter) const;
-	AActor* GetLineTrace(AAR_PlayerCharacter* PlayerCharacter);
+	class AAR_WeaponBase* GetWeapon() const;
+	AActor* GetLineTrace();
 	virtual void Fire() override;
+
+protected:
+	UPROPERTY()
+	class AAR_PlayerCharacter* PlayerCharacter;
 };
