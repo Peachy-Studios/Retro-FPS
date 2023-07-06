@@ -22,7 +22,7 @@ void UAR_RhythmWorldSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	if(!IsValid(BeatsManagerClass)) return;
 
-	BeatsManager = GetWorld()->SpawnActor<AAR_BeatsManager>();
+	BeatsManager = GetWorld()->SpawnActor<AAR_BeatsManager>(BeatsManagerClass);
 }
 
 
