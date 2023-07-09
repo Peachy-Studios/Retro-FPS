@@ -2,10 +2,12 @@
 
 
 #include "AbilitySystem/Abilities/ARGA_Shoot.h"
-
+#include "Utils/LogUtil.h"
 #include "AbilitySystemComponent.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_WaitDelay.h"
+#include "Quartz/AudioMixerClockHandle.h"
+#include "Quartz/QuartzSubsystem.h"
 
 
 UARGA_Shoot::UARGA_Shoot() : Super()
@@ -25,6 +27,17 @@ void UARGA_Shoot::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 
 		WaitForEventTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, WeaponEventTag);
 		WaitForEventTask->EventReceived.AddDynamic(this, &UARGA_Shoot::OnEventReceived);
+
+		// Get Timestamp
+		UQuartzSubsystem* QuartzSubsystem = GetWorld()->GetSubsystem<UQuartzSubsystem>();
+
+		if(!QuartzSubsystem) return;
+		
+		UQuartzClockHandle* ClockHandle = QuartzSubsystem->GetHandleForClock(GetWorld(), FName("Beats Clock"));
+
+		if(!ClockHandle) return;
+
+		UE_LOG(LogRhythm, Warning, TEXT("Shoot Timestamp: %f"), ClockHandle->GetCurrentTimestamp(GetWorld()).Seconds);
 		
 		Fire();
 		

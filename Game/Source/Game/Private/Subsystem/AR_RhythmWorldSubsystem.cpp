@@ -2,7 +2,7 @@
 
 
 #include "Subsystem/AR_RhythmWorldSubsystem.h"
-
+#include "Utils/LogUtil.h"
 #include "Core/AR_BeatsManager.h"
 
 UAR_RhythmWorldSubsystem::UAR_RhythmWorldSubsystem()
@@ -18,7 +18,7 @@ void UAR_RhythmWorldSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-	UE_LOG(LogTemp, Warning, TEXT("Rhythm Subsystem has started!!"));
+	UE_LOG(LogRhythm, Warning, TEXT("Rhythm Subsystem has started!!"));
 
 	if(!IsValid(BeatsManagerClass)) return;
 
