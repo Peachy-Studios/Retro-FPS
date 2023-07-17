@@ -81,14 +81,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8bc5c0b2-a2cc-4db3-8fc2-8e6c6aafe90c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Game/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultGame.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultGame.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Project/Blueprints/Beats/BP_BeatsManager.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Project/Blueprints/Beats/BP_BeatsManager.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/_Project/Maps/RnD.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/_Project/Maps/RnD.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Game/Private/AbilitySystem/Abilities/ARGA_Shoot.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Game/Private/AbilitySystem/Abilities/ARGA_Shoot.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Game/Private/Core/AR_BeatsManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Game/Private/Core/AR_BeatsManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Game/Private/Subsystem/AR_RhythmWorldSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Game/Private/Subsystem/AR_RhythmWorldSubsystem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Game/Public/Core/AR_BeatsManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Game/Public/Core/AR_BeatsManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Game/Public/Subsystem/AR_RhythmWorldSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Game/Public/Subsystem/AR_RhythmWorldSubsystem.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27337,6 +27334,7 @@
       <updated>1688770251437</updated>
       <workItem from="1688770252613" duration="4341000" />
       <workItem from="1688849187152" duration="6160000" />
+      <workItem from="1689606870128" duration="3999000" />
     </task>
     <servers />
   </component>

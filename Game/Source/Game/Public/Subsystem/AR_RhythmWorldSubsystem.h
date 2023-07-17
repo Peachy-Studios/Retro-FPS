@@ -26,4 +26,6 @@ protected:
 public:
 	UAR_RhythmWorldSubsystem();
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
+	FORCEINLINE AAR_BeatsManager* GetBeatsManager() const { return BeatsManager; }
 };

@@ -16,6 +16,14 @@ public:
 	AAR_BeatsManager();
 
 	FORCEINLINE class UAudioComponent* GetAudioComponent() const { return AudioComponent; }
+
+	//! Getter and setter for current action timestamp
+	FORCEINLINE float GetCurrentActionTimeStamp() const { return CurrentActionTimeStamp; }
+	FORCEINLINE void SetCurrentActionTimeStamp(const float& Value) { CurrentActionTimeStamp = Value; }
+
+	//! Getter and setter for has action started
+	FORCEINLINE bool HasActionStarted() const { return bHasActionStarted; }
+	FORCEINLINE void SetHasActionStarted(const bool& Value) { bHasActionStarted = Value; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,6 +39,16 @@ protected:
 
 	UPROPERTY()
 	class UQuartzClockHandle* QuartzClockHandle;
+
+	UPROPERTY()
+	bool bHasActionStarted = false;
+
+	UPROPERTY()
+	float CurrentActionTimeStamp = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float CurrentActionThreshold = 0.2f;
+
 
 	UFUNCTION()
 	void CommandEventBP(EQuartzCommandDelegateSubType EventType, FName Name);

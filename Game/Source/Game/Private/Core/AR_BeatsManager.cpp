@@ -84,9 +84,19 @@ void AAR_BeatsManager::MetronomeEventBP(FName ClockName, EQuartzCommandQuantizat
 	switch (QuantizationType)
 	{
 		case EQuartzCommandQuantization::Beat:
-			UE_LOG(LogRhythm, Warning, TEXT("UAR_RhythmWorldSubsystem: Beat"));
-			break;
+		{
+			if(!QuartzClockHandle) return;
 		
+			//! Checks if action is on the beat
+			float CurrentTimestamp = QuartzClockHandle->GetCurrentTimestamp(GetWorld()).Seconds;
+
+			if(CurrentActionTimeStamp >= (CurrentTimestamp - CurrentActionThreshold) && CurrentActionTimeStamp <= (CurrentTimestamp + CurrentActionThreshold))
+			{
+				UE_LOG(LogRhythm, Warning, TEXT("UAR_RhythmWorldSubsystem: On Beat"));
+			}
+			break;
+				
+		}
 		default:
 			break;
 	}

@@ -6,8 +6,10 @@
 #include "AbilitySystemComponent.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_WaitDelay.h"
+#include "Core/AR_BeatsManager.h"
 #include "Quartz/AudioMixerClockHandle.h"
 #include "Quartz/QuartzSubsystem.h"
+#include "Subsystem/AR_RhythmWorldSubsystem.h"
 
 
 UARGA_Shoot::UARGA_Shoot() : Super()
@@ -30,14 +32,16 @@ void UARGA_Shoot::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 
 		// Get Timestamp
 		UQuartzSubsystem* QuartzSubsystem = GetWorld()->GetSubsystem<UQuartzSubsystem>();
+		UAR_RhythmWorldSubsystem* RhythmWorldSystem = GetWorld()->GetSubsystem<UAR_RhythmWorldSubsystem>();
 
-		if(!QuartzSubsystem) return;
+		if(!QuartzSubsystem || ! RhythmWorldSystem) return;
 		
 		UQuartzClockHandle* ClockHandle = QuartzSubsystem->GetHandleForClock(GetWorld(), FName("Beats Clock"));
+		AAR_BeatsManager* BeatsManager = RhythmWorldSystem->GetBeatsManager();
 
-		if(!ClockHandle) return;
+		if(!ClockHandle || ! BeatsManager) return;
 
-		UE_LOG(LogRhythm, Warning, TEXT("Shoot Timestamp: %f"), ClockHandle->GetCurrentTimestamp(GetWorld()).Seconds);
+		BeatsManager->SetCurrentActionTimeStamp(ClockHandle->GetCurrentTimestamp(GetWorld()).Seconds);
 		
 		Fire();
 		
@@ -62,7 +66,7 @@ void UARGA_Shoot::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGam
 	{
 		FireRateDelayTask->EndTask();
 	}
-
+	
 	Reset();
 }
 
